@@ -1,5 +1,6 @@
 package appTests;
 
+import amazonDriverManagers.WebDriverCash;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -16,6 +17,7 @@ public class WebDriverTests {
         System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver");
         System.setProperty("webdriver.http.factory", "jdk-http-client");
         driver = new ChromeDriver();
+
     }
 
     @BeforeEach
@@ -32,17 +34,20 @@ public class WebDriverTests {
         email.sendKeys("hi@gb.com");
         Assertions.assertTrue(email.isDisplayed());
         driver.findElement(By.xpath("//input[@id='continue']")).click();
+        String expected = "Amazon Sign-In";
+        Assertions.assertEquals(expected,driver.getTitle());
+
     }
 
     @Test
-    public void searchFiels() {
+    public void searchFields() {
         driver.get("https://www.amazon.com/");
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         WebElement searchField = driver.findElement(By.xpath("//input[@id='twotabsearchtextbox']"));
         searchField.click();
         searchField.sendKeys("hi");
         driver.findElement(By.xpath("//input[@id='nav-search-submit-button']")).click();
-
+        Assertions.assertFalse(driver.getCurrentUrl().contains("https://www.amazon.com/cart/"));
     }
 
     @Test
